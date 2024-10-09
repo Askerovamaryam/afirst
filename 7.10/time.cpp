@@ -1,30 +1,7 @@
+#include <iostream>
 #include "time.h"
 using namespace chron;
-Time::Time(int h,int m,int s)
-{
-	m+=s/60;
-	s %= 60;
-	if(s<0)
-	{
-		m-=1;
-		s+=60;
-	}
-	h+=m/60;
-	m % 60;
-	if(m<0)
-	{
-		h-=1;
-		m+=60;
-	}
-	h%=24;
-	if(h<0)
-	{
-		h+=24;
-	}
-	hours=h;
-	minutes=m;
-	seconds=s;
-}
+
 int Time::GetHours() const 
 {
 	return hours;
@@ -37,5 +14,62 @@ int Time::GetSeconds() const
 {
 	return seconds;
 } 
-
-
+void Time::AddSeconds(int s)
+{
+	seconds+=s;
+	normalise();
+}
+int Time::TotalSeconds() const
+{
+	return 3600*hours+60*minutes+seconds;
+}
+Time::Time(int h, int m, int s): hours(h),minutes(m),seconds(s)
+{
+	normalise();
+}
+void Time::normalise()
+{
+minutes+=seconds/60;
+	seconds %= 60;
+	if(seconds<0)
+	{
+		minutes-=1;
+		seconds+=60;
+	}
+hours+=minutes/60;
+	minutes %= 60;
+	if(minutes<0)
+	{
+		hours-=1;
+		minutes+=60;
+	}
+	hours%=24;
+	if(hours<0)
+	{
+		hours+=24;
+	}
+}
+Time& Time::operator+=(int s)
+{
+	seconds += s;
+	normalise();
+	return *this;
+}	
+Time Time::operator+(int s)const
+{
+	return Time(hours,minutes,seconds+s);
+}
+//Time operator+(const Time& t,int s)
+//{
+	//return Time(t.GetHours(),t.GetMinutes(),t.GetSeconds()+s);
+//}
+int operator-(const chron::Time& t1,const chron::Time& t2)
+{
+	return t1.TotalSeconds() - t2.TotalSeconds();
+}
+std::ostream& operator<<(std::ostream& out,const chron::Time& t)
+{
+	out<<t.GetHours()<<":"<<t.GetMinutes()<<":"<<t.GetSeconds();
+	return out;
+}
+	
