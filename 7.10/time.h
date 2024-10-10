@@ -24,5 +24,6 @@ public:
 };
 }
    int operator-(const chron::Time& t1,const chron::Time& t2);
+   std::ostream& operator<<(std::ostream& out, const chron::Time& t);
 
 #endif //TIME_H

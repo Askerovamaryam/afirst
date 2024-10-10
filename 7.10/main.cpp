@@ -3,7 +3,7 @@
 int main()
 {
 	chron::Time t(13,30,0);
-	std::cout<<t.GetHours()<<"\n";
+	std::cout<<t<<"\n";
 	return 0;
 }
 	
